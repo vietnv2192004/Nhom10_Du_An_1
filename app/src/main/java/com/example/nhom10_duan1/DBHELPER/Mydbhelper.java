@@ -43,11 +43,18 @@ public class Mydbhelper extends SQLiteOpenHelper {
                         "Gio TEXT NOT NULL,"+
                         "Luong TEXT NOT NULL )";
         db.execSQL(tb_congviec);
+        String tb_hanghoa =
+                "create table Hanghoa (" +
+                        "maHanghoa INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "tenHanghoa TEXT UNIQUE NOT NULL,"+
+                        "soluong INTERGER)";
+        db.execSQL(tb_hanghoa);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
 
         String dropTableNhanvien = "drop table if exists NhanVien";
         db.execSQL(dropTableNhanvien);
@@ -57,8 +64,11 @@ public class Mydbhelper extends SQLiteOpenHelper {
         db.execSQL(dropTablesanpham);
         String dropTablecongviec = "drop table if exists Congviec";
         db.execSQL(dropTablecongviec);
+        String dropTablehanghoa = "drop table if exists Hanghoa";
+        db.execSQL(dropTablehanghoa);
         onCreate(db);
     }
+
     public boolean checkMaNVExists(String maNV) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM NhanVien WHERE maNV = ?";
@@ -91,4 +101,17 @@ public class Mydbhelper extends SQLiteOpenHelper {
         String[] selectionArgs = {maNV};
         db.update("NhanVien", values, selection, selectionArgs);
     }
+    public boolean deleteHanghoa(String tenHanghoa) {
+        SQLiteDatabase db = getWritableDatabase();
+        int rowsAffected = db.delete("Hanghoa", "tenHanghoa = ?", new String[]{tenHanghoa});
+        db.close();
+        return rowsAffected > 0;
+    }
+
+    public Cursor getAllHanghoa() {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.rawQuery("SELECT * FROM Hanghoa", null);
+    }
+
 }
+
