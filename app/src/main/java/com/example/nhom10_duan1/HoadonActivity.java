@@ -19,10 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.nhom10_duan1.DBHELPER.Mydbhelper;
 import com.example.nhom10_duan1.LOPADAPTER.HanghoaAdapter;
+import com.example.nhom10_duan1.LOPDAO.HoadonDAO;
 import com.example.nhom10_duan1.LOPDTO.HanghoaDTO;
+import com.example.nhom10_duan1.LOPDTO.HoadonDTO;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,31 +73,35 @@ public class HoadonActivity extends AppCompatActivity {
 
         btn_luuhoadon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Mydbhelper dbHelper = new Mydbhelper(HoadonActivity.this);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+            public void onClick(View v) {
 
-                db.delete("Hanghoa", null, null);
-                db.close();
-
-                hanghoaList.clear();
-                hanghoaAdapter.notifyDataSetChanged();
-
-                // Update total quantity and total price
-                int tongSoLuong = 0;
-                int tongTien = 0;
+                StringBuilder hangHoaStringBuilder = new StringBuilder();
                 for (HanghoaDTO hanghoa : hanghoaList) {
-                    tongSoLuong += hanghoa.getSoLuong();
-
+                    String tenHanghoa = hanghoa.getTenHanghoa();
                     int soLuong = hanghoa.getSoLuong();
-                    int gia = getProductPriceFromDatabase(hanghoa.getTenHanghoa());
-                    int thanhTien = soLuong * gia;
-
-                    tongTien += thanhTien;
+                    hangHoaStringBuilder.append(tenHanghoa).append(" - số lượng:").append(soLuong).append("\n");
                 }
+                String thongTinHangHoa = hangHoaStringBuilder.toString().trim();
 
-                tv_soluonghanghoa.setText(String.valueOf(tongSoLuong));
-                tv_tongtien.setText(String.valueOf(tongTien));
+                // Lấy các giá trị khác từ giao diện
+                int tongSoLuong = Integer.parseInt(tv_soluonghanghoa.getText().toString());
+                int tongTien = Integer.parseInt(tv_tongtien.getText().toString());
+                String ngayMua = tv_ngaymua.getText().toString();
+
+                // Tạo đối tượng Hoadon và gán giá trị
+                HoadonDTO hoadon = new HoadonDTO();
+                hoadon.setTenSanpham(thongTinHangHoa);
+                hoadon.setSoLuong(tongSoLuong);
+                hoadon.setTongTien(tongTien);
+                hoadon.setNgayMua(ngayMua);
+
+                HoadonDAO hoadonDAO = new HoadonDAO(HoadonActivity.this);
+                hoadonDAO.addHoadon(hoadon);
+
+                Toast.makeText(HoadonActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                setResult(AppCompatActivity.RESULT_OK);
+                finish();
+
             }
         });
     }
@@ -201,7 +206,7 @@ public class HoadonActivity extends AppCompatActivity {
         while (cursor.moveToNext()) {
             String productName = cursor.getString(cursor.getColumnIndexOrThrow("tenSanpham"));
 
-            String productInfo = productName ;
+            String productInfo = productName;
             productInfoList.add(productInfo);
         }
 
