@@ -123,11 +123,9 @@ public class HoadonActivity extends AppCompatActivity {
         // Lấy ngày và giờ hiện tại
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String currentDate = dateFormat.format(calendar.getTime());
-        String currentTime = timeFormat.format(calendar.getTime());
 
-        tv_ngaymua.setText(currentDate + " " + currentTime);
+        tv_ngaymua.setText(currentDate);
 
         builder.setTitle("Thêm hàng hóa");
         builder.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
