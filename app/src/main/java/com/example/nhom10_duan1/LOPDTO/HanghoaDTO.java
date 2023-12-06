@@ -9,6 +9,25 @@ public class HanghoaDTO {
     public int getId() {
         return id;
     }
+
+    public void setTenHanghoa(String tenHanghoa) {
+        this.tenHanghoa = tenHanghoa;
+    }
+
+    public HanghoaDTO( int id,String tenHanghoa, int soLuong) {
+        this.tenHanghoa = tenHanghoa;
+        this.soLuong = soLuong;
+        this.id = id;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public HanghoaDTO(String tenHanghoa, int soLuong) {
         this.tenHanghoa = tenHanghoa;
         this.soLuong = soLuong;

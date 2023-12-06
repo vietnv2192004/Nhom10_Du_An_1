@@ -177,4 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+public static int getId(){
+        return R.id.frag_container01;
+}
 }

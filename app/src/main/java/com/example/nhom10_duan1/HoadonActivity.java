@@ -16,10 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nhom10_duan1.DBHELPER.Mydbhelper;
+import com.example.nhom10_duan1.Frag.Frag_hoadon;
 import com.example.nhom10_duan1.LOPADAPTER.HanghoaAdapter;
 import com.example.nhom10_duan1.LOPDAO.HoadonDAO;
 import com.example.nhom10_duan1.LOPDTO.HanghoaDTO;
@@ -35,6 +39,7 @@ import java.util.Map;
 
 public class HoadonActivity extends AppCompatActivity {
     private RecyclerView rcl_hanghoa;
+    Frag_hoadon fragHoadon;
     private Button add_hanghoa;
     private Button btn_luuhoadon;
     private TextView tv_soluonghanghoa, tv_tongtien, tv_ngaymua;
@@ -47,6 +52,13 @@ public class HoadonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoadon);
+        Button huy = findViewById(R.id.btn_huy);
+        huy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         rcl_hanghoa = findViewById(R.id.rcv_hanghoa1);
         add_hanghoa = findViewById(R.id.btn_themhanghoa);
@@ -56,6 +68,7 @@ public class HoadonActivity extends AppCompatActivity {
         tv_ngaymua = findViewById(R.id.TV_ngay);
         layoutManager = new LinearLayoutManager(this);
         rcl_hanghoa.setLayoutManager(layoutManager);
+        fragHoadon = new Frag_hoadon();
 
         hanghoaList = new ArrayList<>();
         hanghoaAdapter = new HanghoaAdapter(hanghoaList, this);
@@ -101,6 +114,11 @@ public class HoadonActivity extends AppCompatActivity {
                 Toast.makeText(HoadonActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                 setResult(AppCompatActivity.RESULT_OK);
                 finish();
+                // Tải lại Fragment bằng cách tìm và thêm lại nó vào Container
+
+
+
+
 
             }
         });
@@ -234,4 +252,6 @@ public class HoadonActivity extends AppCompatActivity {
 
         return productPrice;
     }
+
+
 }

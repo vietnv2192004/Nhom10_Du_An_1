@@ -45,7 +45,7 @@ public class HoadonDAO {
     }
 
     public List<HoadonDTO> GETS() {
-        String dl = "SELECT * FROM Sanpham";
+        String dl = "SELECT * FROM Hoadon";
         List<HoadonDTO> list = getdata(dl);
         return list;
     }

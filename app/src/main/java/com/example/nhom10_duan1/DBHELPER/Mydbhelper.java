@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class Mydbhelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "DUAN1.db";
-    private static final int VERSION = 5;
+    private static final int VERSION = 7;
 
     public Mydbhelper(Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -57,6 +57,7 @@ public class Mydbhelper extends SQLiteOpenHelper {
                         "Tongtien INTERGER NOT NULL,"+
                         "Ngaymua TEXT NOT NULL )";
         db.execSQL(tb_hoadon);
+        db.execSQL("insert into Hoadon values(4,'rt',5,4567,'09/09/2004')");
     }
 
     @Override

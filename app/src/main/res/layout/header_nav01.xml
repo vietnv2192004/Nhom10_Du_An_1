@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/white"
-        android:text="Chào mừng bạn quay chở lại"
+        android:text="Chào mừng bạn quay trở lại"
         android:textSize="20sp"/>
 
 </LinearLayout>
