@@ -51,7 +51,7 @@ public class HoadonDAO {
     }
 
     public HoadonDTO getId(String id) {
-        String sql = "SELECT * FROM Sanpham WHERE maSanpham=?";
+        String sql = "SELECT * FROM Sanpham WHERE  Hoadon";
         List<HoadonDTO> list = getdata(sql, id);
         return list.get(0);
     }
@@ -71,4 +71,17 @@ public class HoadonDAO {
         }
         return list;
     }
+    @SuppressLint("Range")
+    public int getDoanhthu(String tuNgay, String denNgay) {
+        String sqlDoanhThu = "SELECT SUM(Tongtien) FROM Hoadon Where Ngaymua BETWEEN ? AND ? ";
+        List<Integer> list = new ArrayList<>();
+        Cursor c = sqlite.rawQuery(sqlDoanhThu, new String[]{tuNgay, denNgay});
+
+        while (c.moveToNext()) {
+            list.add(c.getInt(0));
+        }
+
+        return list.get(0);
+    }
+
 }

@@ -55,7 +55,7 @@ public class Mydbhelper extends SQLiteOpenHelper {
                         "tenSanpham TEXT  NOT NULL,"+
                         "maHoadon INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "Tongtien INTERGER NOT NULL,"+
-                        "Ngaymua TEXT NOT NULL )";
+                        "Ngaymua DATE NOT NULL )";
         db.execSQL(tb_hoadon);
         db.execSQL("insert into Hoadon values(4,'rt',5,4567,'09/09/2004')");
     }
@@ -111,7 +111,21 @@ public class Mydbhelper extends SQLiteOpenHelper {
         String[] selectionArgs = {maNV};
         db.update("NhanVien", values, selection, selectionArgs);
     }
+    public int getDoanhThuByDate(String fromDate, String toDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int doanhThu = 0;
 
+        String query = "SELECT SUM(Tongtien) FROM Hoadon WHERE Ngaymua >= ? AND Ngaymua <= ?";
+        Cursor cursor = db.rawQuery(query, new String[]{fromDate, toDate});
 
+        if (cursor.moveToFirst()) {
+            doanhThu = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return doanhThu;
+    }
 }
 
