@@ -31,17 +31,21 @@ public class HoadonDAO {
         createData.close();
     }
 
-    public long addHoadon(HoadonDTO hoadon) {
+    public long addHoadon(HoadonDTO hoadonDTO) {
         ContentValues values = new ContentValues();
-        values.put(HoadonDTO.COL_TENSANPHAM, hoadon.getTenSanpham());
-        values.put(HoadonDTO.COL_SOLUONG, hoadon.getSoLuong());
-        values.put(HoadonDTO.COL_TONGTIEN, hoadon.getTongTien());
-        values.put(HoadonDTO.COL_NGAYMUA, hoadon.getNgayMua());
-        return sqlite.insert(HoadonDTO.TB_NAME, null, values);
+        values.put("soluong", hoadonDTO.getSoLuong());
+        values.put("tenSanpham", hoadonDTO.getTenSanpham());
+        values.put("Tongtien", hoadonDTO.getTongTien());
+        values.put("Ngaymua", hoadonDTO.getNgayMua());
+
+        SQLiteDatabase db = createData.getWritableDatabase();
+        long result = db.insert("Hoadon", null, values);
+        db.close();
+        return result;
     }
 
-    public int DELETE(String mNV) {
-        return sqlite.delete(HoadonDTO.TB_NAME, "maHoadon=?", new String[]{mNV});
+    public void DELETE(String maHoadon) {
+        sqlite.delete(HoadonDTO.TB_NAME, HoadonDTO.COL_TONGTIEN+ " = ?", new String[]{maHoadon});
     }
 
     public List<HoadonDTO> GETS() {
@@ -51,13 +55,17 @@ public class HoadonDAO {
     }
 
     public HoadonDTO getId(String id) {
-        String sql = "SELECT * FROM Sanpham WHERE  Hoadon";
+        String sql = "SELECT * FROM Hoadon WHERE maHoadon=?";
         List<HoadonDTO> list = getdata(sql, id);
-        return list.get(0);
+        if (!list.isEmpty()) {
+            return list.get(0);
+        } else {
+            return null;
+        }
     }
 
     @SuppressLint("Range")
-    private List<HoadonDTO> getdata(String dl, String... Arays /* có hoặc không nhiều phần tử*/) {
+    private List<HoadonDTO> getdata(String dl, String... Arays) {
         List<HoadonDTO> list = new ArrayList<>();
         Cursor cursor = sqlite.rawQuery(dl, Arays);
         while (cursor.moveToNext()) {
@@ -70,18 +78,6 @@ public class HoadonDAO {
             list.add(hoadon);
         }
         return list;
-    }
-    @SuppressLint("Range")
-    public int getDoanhthu(String tuNgay, String denNgay) {
-        String sqlDoanhThu = "SELECT SUM(Tongtien) FROM Hoadon Where Ngaymua BETWEEN ? AND ? ";
-        List<Integer> list = new ArrayList<>();
-        Cursor c = sqlite.rawQuery(sqlDoanhThu, new String[]{tuNgay, denNgay});
-
-        while (c.moveToNext()) {
-            list.add(c.getInt(0));
-        }
-
-        return list.get(0);
     }
 
 }

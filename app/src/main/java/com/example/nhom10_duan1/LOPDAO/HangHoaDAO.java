@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.nhom10_duan1.DBHELPER.Mydbhelper;
 import com.example.nhom10_duan1.LOPDTO.HanghoaDTO;
+import com.example.nhom10_duan1.LOPDTO.HoadonDTO;
 
 import java.util.ArrayList;
 
@@ -35,11 +36,14 @@ public class HangHoaDAO {
         }
         return list;
     }
-
-    public boolean delete(int id){
-        SQLiteDatabase db = createData.getWritableDatabase();
-        long row = db.delete("Hanghoa","maHanghoa=?",new String[]{String.valueOf(id)});
-        return (row>0);
+    public void OPEN() {
+       liteDatabase = createData.getWritableDatabase();
     }
 
+    public void Close() {
+        createData.close();
+    }
+    public void DELETE(int maHanghoa) {
+        liteDatabase.delete(HanghoaDTO.TB_NAME, HanghoaDTO.COL_MAHD + " = ?", new String[]{String.valueOf(maHanghoa)});
+    }
 }

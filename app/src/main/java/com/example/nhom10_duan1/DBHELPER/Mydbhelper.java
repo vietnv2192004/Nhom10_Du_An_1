@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.nhom10_duan1.LOPDTO.HoadonDTO;
+
 public class Mydbhelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "DUAN1.db";
     private static final int VERSION = 7;
+
 
     public Mydbhelper(Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -51,13 +54,13 @@ public class Mydbhelper extends SQLiteOpenHelper {
         db.execSQL(tb_hanghoa);
         String tb_hoadon =
                 "create table Hoadon (" +
-                        "soluong INTERGER NOT NULL,"+
-                        "tenSanpham TEXT  NOT NULL,"+
                         "maHoadon INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "Tongtien INTERGER NOT NULL,"+
-                        "Ngaymua DATE NOT NULL )";
+                        "soluong INTEGER NOT NULL, " +
+                        "tenSanpham TEXT NOT NULL, " +
+                        "Tongtien INTEGER NOT NULL, " +
+                        "Ngaymua DATE NOT NULL)";
         db.execSQL(tb_hoadon);
-        db.execSQL("insert into Hoadon values(4,'rt',5,4567,'09/09/2004')");
+
     }
 
     @Override
@@ -127,5 +130,6 @@ public class Mydbhelper extends SQLiteOpenHelper {
 
         return doanhThu;
     }
+
 }
 

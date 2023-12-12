@@ -69,24 +69,28 @@ public class Frag_nhanvien extends Fragment {
                         congviecDTO.setTenNhanvien(ed_tennv.getText().toString());
                         String gio = ed_gio.getText().toString();
                         String luong = ed_luong.getText().toString();
-
+                        String tenNhanVien = ed_tennv.getText().toString().trim();
                         // Check if gio and luong contain only numbers
+
+                        if (tenNhanVien.isEmpty() || gio.isEmpty() || luong.isEmpty()) {
+                            Toast.makeText(getActivity(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         if (isNumeric(gio) && isNumeric(luong)) {
+
+                            congviecDTO.setTenNhanvien(tenNhanVien);
                             congviecDTO.setSogio(gio);
                             congviecDTO.setLuong(luong);
 
-                            long kq = congviecdao.ADDLS(congviecDTO);
-                            if (kq > 0) {
+
                                 ed_tennv.setText("");
                                 ed_gio.setText("");
                                 ed_luong.setText("");
-                                Toast.makeText(getActivity(), "Thêm Hãng Thành Công", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Thêm công việc Thành Công", Toast.LENGTH_SHORT).show();
                                 // Tải lại danh sách sau khi thêm
                                 List<CongviecDTO> updatedHangList = congviecdao.GETLS();
                                 adapter.updateList(updatedHangList);
-                            } else {
-                                Toast.makeText(getActivity(), "Tên Hãng Trùng Lặp \n Thêm Thất Bại", Toast.LENGTH_SHORT).show();
-                            }
+
                         } else {
                             Toast.makeText(getActivity(), "Giờ và lương phải là số", Toast.LENGTH_SHORT).show();
                         }

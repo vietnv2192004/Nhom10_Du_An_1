@@ -96,29 +96,26 @@ public class HanghoaAdapter extends RecyclerView.Adapter<HanghoaAdapter.ViewHold
 
     private void deleteItem(int position) {
         if (position >= 0 && position < hanghoaList.size()) {
-            HanghoaDTO deletedHanghoa = hanghoaList.remove(position);
+            HanghoaDTO deletedHanghoa = hanghoaList.get(position);
+            hanghoaList.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, hanghoaList.size());
 
             Mydbhelper dbHelper = new Mydbhelper(context);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            int deletedRows = db.delete("Hanghoa", "tenhanghoa = ?", new String[]{deletedHanghoa.getTenHanghoa()});
+            db.beginTransaction();
+            try {
+                int deletedRows = db.delete("Hanghoa", "maHanghoa = ?", new String[]{String.valueOf(deletedHanghoa.getId())});
 
-            if (deletedRows > 0) {
-                // Thực hiện cập nhật hoặc xử lý sau khi xóa thành công
-                ContentValues values = new ContentValues();
-                values.put("tenhanghoa", deletedHanghoa.getTenHanghoa());
-                values.put("soluong", deletedHanghoa.getSoLuong());
-
-                long newRowId = db.insert("Hanghoa", null, values);
-                if (newRowId != -1) {
-                    // Xử lý khi thêm lại hàng hóa thành công
+                if (deletedRows > 0) {
+                    db.setTransactionSuccessful();
+                    // Xử lý sau khi xóa thành công
                 } else {
-                    // Xử lý khi thêm lại hàng hóa không thành công
+                    // Xử lý khi không xóa được hàng hóa từ cơ sở dữ liệu
                 }
-            } else {
-                // Xử lý khi không xóa được hàng hóa từ cơ sở dữ liệu
+            } finally {
+                db.endTransaction();
             }
 
             db.close();

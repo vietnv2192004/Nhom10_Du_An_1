@@ -1,5 +1,6 @@
 package com.example.nhom10_duan1.LOPADAPTER;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nhom10_duan1.LOPDAO.HoadonDAO;
-import com.example.nhom10_duan1.LOPDAO.nhanvienDAO;
 import com.example.nhom10_duan1.LOPDTO.HoadonDTO;
 import com.example.nhom10_duan1.R;
 
@@ -22,15 +22,19 @@ import java.util.List;
 
 public class HoadonAdapter extends RecyclerView.Adapter<HoadonAdapter.ViewHolder> {
     private List<HoadonDTO> hoaDonList;
-    HoadonDAO hoadonDAO;
-    Context context;
+    private HoadonDAO hoadonDAO;
+    private Context context;
 
     public HoadonAdapter(List<HoadonDTO> hoaDonList, Context context) {
         this.hoaDonList = hoaDonList;
         this.context = context;
-
+        hoadonDAO = new HoadonDAO(context);
     }
 
+    public void setHoaDonList(List<HoadonDTO> hoaDonList) {
+        this.hoaDonList = hoaDonList;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -40,14 +44,14 @@ public class HoadonAdapter extends RecyclerView.Adapter<HoadonAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         HoadonDTO hoadonDTO = hoaDonList.get(position);
-
 
         holder.soLuongTextView.setText(String.valueOf(hoadonDTO.getSoLuong()));
         holder.tenSanPhamTextView.setText(hoadonDTO.getTenSanpham());
         holder.tongTienTextView.setText(String.valueOf(hoadonDTO.getTongTien()));
         holder.ngayMuaTextView.setText(hoadonDTO.getNgayMua());
+
         holder.ingxoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,19 +63,16 @@ public class HoadonAdapter extends RecyclerView.Adapter<HoadonAdapter.ViewHolder
                 builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                         hoadonDAO = new HoadonDAO(context);
                         hoadonDAO.OPEN();
-                        int kq = hoadonDAO.DELETE(String.valueOf(hoadonDTO.getMahoadon()));
-                        if (kq > 0) {
-                            hoaDonList.clear();
-                            hoaDonList.addAll(hoadonDAO.GETS());
-                            notifyDataSetChanged();
-                            dialog.dismiss();
-                            Toast.makeText(context, "Xóa Nhân Viên Thành Công", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "Xóa Nhân Viên Thất Bại", Toast.LENGTH_SHORT).show();
-                        }
+
+                        String maHoadon = String.valueOf(hoadonDTO.getTongTien());
+                        hoadonDAO.DELETE(maHoadon);
+                        hoaDonList.remove(position);
+                        setHoaDonList(hoaDonList);
+                        Toast.makeText(context, "Xóa hóa đơn thành công", Toast.LENGTH_SHORT).show();
+
                         hoadonDAO.Close();
+                        dialog.dismiss();
                     }
                 });
                 builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
@@ -81,9 +82,9 @@ public class HoadonAdapter extends RecyclerView.Adapter<HoadonAdapter.ViewHolder
                     }
                 });
                 builder.create().show();
-
             }
         });
+
     }
 
     @Override
@@ -96,7 +97,8 @@ public class HoadonAdapter extends RecyclerView.Adapter<HoadonAdapter.ViewHolder
         private TextView tenSanPhamTextView;
         private TextView tongTienTextView;
         private TextView ngayMuaTextView;
- private ImageView ingxoa;
+
+        private ImageView ingxoa;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,8 +107,7 @@ public class HoadonAdapter extends RecyclerView.Adapter<HoadonAdapter.ViewHolder
             tenSanPhamTextView = itemView.findViewById(R.id.tenSanPhamTextView);
             tongTienTextView = itemView.findViewById(R.id.tongTienTextView);
             ngayMuaTextView = itemView.findViewById(R.id.ngayMuaTextView);
-            ingxoa=itemView.findViewById(R.id.imgxoa);
+            ingxoa = itemView.findViewById(R.id.imgxoa);
         }
     }
 }
-

@@ -42,4 +42,10 @@ public class HanghoaDTO {
     }
 
 
+
+    public static final String TB_NAME = "Hanghoa";
+    public static final String COL_MAHD = "maHanghoa";
+    public static final String COL_TENHANGHOA = "tenHanghoa";
+    public static final String COL_SOLUONG = "soluong";
+
 }
