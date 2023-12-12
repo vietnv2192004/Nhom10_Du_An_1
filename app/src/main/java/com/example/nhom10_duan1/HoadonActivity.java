@@ -47,12 +47,14 @@ public class HoadonActivity extends AppCompatActivity {
     private HanghoaAdapter hanghoaAdapter;
     private List<HanghoaDTO> hanghoaList;
     private HashMap<String, Integer> hanghoaMap;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoadon);
         Button huy = findViewById(R.id.btn_huy);
+        fragmentManager = getSupportFragmentManager();
         huy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +96,12 @@ public class HoadonActivity extends AppCompatActivity {
                     int soLuong = hanghoa.getSoLuong();
                     hangHoaStringBuilder.append(tenHanghoa).append(" - số lượng:").append(soLuong).append("\n");
                 }
+
                 String thongTinHangHoa = hangHoaStringBuilder.toString().trim();
+                if (thongTinHangHoa.isEmpty()) {
+                    Toast.makeText(HoadonActivity.this, "Vui lòng nhập thông tin hàng hóa", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // Lấy các giá trị khác từ giao diện
                 int tongSoLuong = Integer.parseInt(tv_soluonghanghoa.getText().toString());
@@ -112,9 +119,9 @@ public class HoadonActivity extends AppCompatActivity {
                 hoadonDAO.addHoadon(hoadon);
 
                 Toast.makeText(HoadonActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+
                 setResult(AppCompatActivity.RESULT_OK);
                 finish();
-                // Tải lại Fragment bằng cách tìm và thêm lại nó vào Container
 
 
 
@@ -156,7 +163,10 @@ public class HoadonActivity extends AppCompatActivity {
                     Toast.makeText(HoadonActivity.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (!strSoLuong.matches("\\d+")) {
+                    Toast.makeText(HoadonActivity.this, "Số lượng phải là số", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 int soLuong = Integer.parseInt(strSoLuong);
 
 
@@ -193,7 +203,7 @@ public class HoadonActivity extends AppCompatActivity {
                     hanghoaList.add(hanghoa);
                 }
 
-                hanghoaAdapter.notifyDataSetChanged();
+
                 int tongSoLuong = 0;
                 int tongTien = 0;
                 for (HanghoaDTO hanghoa : hanghoaList) {
@@ -208,6 +218,7 @@ public class HoadonActivity extends AppCompatActivity {
 
                 tv_soluonghanghoa.setText("" + tongSoLuong);
                 tv_tongtien.setText("" + tongTien);
+                hanghoaAdapter.notifyDataSetChanged();
             }
         });
         builder.create().show();
@@ -250,6 +261,5 @@ public class HoadonActivity extends AppCompatActivity {
 
         return productPrice;
     }
-
 
 }

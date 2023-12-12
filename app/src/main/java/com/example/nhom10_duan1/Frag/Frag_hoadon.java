@@ -101,10 +101,5 @@ list.add(new HoadonDTO(soLuong,tenSanPham,tongTien,ngayMua));
 
         adapter.notifyDataSetChanged();
     }
-    public void onActivityFinish(){
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.detach(this);
-        fragmentTransaction.attach(this);
-        fragmentTransaction.commit();
-    }
+
 }

@@ -63,7 +63,7 @@ public class Quenmatkhau extends AppCompatActivity {
                         Toast.makeText(Quenmatkhau.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(Quenmatkhau.this, "Mã NV hoặc số điện thoại không đúng", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Quenmatkhau.this, "Tên đăng nhập hoặc số điện thoại không đúng", Toast.LENGTH_SHORT).show();
                 }
             }
         });

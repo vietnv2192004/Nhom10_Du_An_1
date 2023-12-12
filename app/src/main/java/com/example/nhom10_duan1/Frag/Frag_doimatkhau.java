@@ -46,6 +46,11 @@ public class Frag_doimatkhau extends Fragment {
                 String matKhauMoi = ed_Matkhaumoi.getText().toString();
                 String nhapLaiMatKhauMoi = ed_Nhaplaimatkhaumoi.getText().toString();
 
+                if (matKhauMoi.isEmpty()) {
+                    Toast.makeText(getContext(), "Vui lòng nhập mật khẩu mới", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (matKhauMoi.equals(nhapLaiMatKhauMoi)) {
                     dbHelper = new Mydbhelper(getContext());
 
